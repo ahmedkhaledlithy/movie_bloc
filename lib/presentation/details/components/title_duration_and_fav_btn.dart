@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:movie_app/business_logic/themebloc/theme_cubit.dart';
 import 'package:movie_app/business_logic/videobloc/video_bloc.dart';
 import 'package:movie_app/constants/constants_app.dart';
 import 'package:movie_app/constants/strings.dart';
 import 'package:movie_app/data/models/movie_details.dart';
 import 'package:movie_app/data/models/video.dart';
+import 'package:movie_app/shared/loading_widget.dart';
+import 'package:movie_app/shared/shared_error.dart';
 
 class TitleDurationAndFabBtn extends StatelessWidget {
   final MovieDetails movie;
@@ -30,8 +33,8 @@ class TitleDurationAndFabBtn extends StatelessWidget {
                   children: [
                      Text(
                        "${movie.voteAverage! /2}",
-                      style: const TextStyle(
-                        color: Colors.black,
+                      style:  TextStyle(
+                        color: BlocProvider.of<ThemeCubit>(context).state? lightColor: Colors.black,
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                       ),
@@ -46,7 +49,6 @@ class TitleDurationAndFabBtn extends StatelessWidget {
                       direction: Axis.horizontal,
                       allowHalfRating: true,
                       itemCount: 5,
-
                       itemBuilder: (context, index) {
                         return IconButton(
                             icon: const Icon(
@@ -67,7 +69,7 @@ class TitleDurationAndFabBtn extends StatelessWidget {
           BlocBuilder<VideoBloc,VideoState>(
             builder: (BuildContext context, state) {
              if(state is VideoError){
-               return Center(child: Text(state.errorMessage),);
+               return SharedError(error: state.errorMessage);
              }else if(state is VideoLoaded){
                List<Results> video= state.video.results!;
                return SizedBox(
@@ -75,7 +77,9 @@ class TitleDurationAndFabBtn extends StatelessWidget {
                  width: 60,
                  child: TextButton(
                    onPressed: () {
-                     Navigator.pushNamed(context, videoScreen,arguments: video[0].key);
+                     video.isEmpty?
+                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text("Sorry No Video")))
+                         :Navigator.pushNamed(context, videoScreen,arguments: video[0].key);
                    },
                    style: ButtonStyle(
                      backgroundColor: MaterialStateProperty.all(kSecondaryColor),
@@ -93,7 +97,7 @@ class TitleDurationAndFabBtn extends StatelessWidget {
                  ),
                );
              }else{
-               return const Center(child: CircularProgressIndicator(),);
+               return const LoadingWidget();
              }
             },
 

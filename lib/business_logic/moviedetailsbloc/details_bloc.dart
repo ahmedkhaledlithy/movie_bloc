@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:movie_app/data/models/movie_details_response.dart';
+import 'package:movie_app/data/models/movie_details.dart';
 import 'package:movie_app/repositories/movies_repository.dart';
 
 part 'details_event.dart';
@@ -16,7 +16,7 @@ class DetailsBloc extends Bloc<DetailsEvent, DetailsState> {
       if (event is DetailsEventStarted) {
         try {
           emit(DetailsLoading());
-          MovieDetailsResponse details = await repositories.getMoviesDetails(event.movieId);
+          MovieDetails details = await repositories.getMoviesDetails(event.movieId);
           emit(DetailsLoaded(movieDetails: details));
 
         }catch (e) {

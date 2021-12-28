@@ -5,8 +5,9 @@ import 'package:movie_app/business_logic/moviebloc/movie_bloc.dart';
 import 'package:movie_app/constants/constants_app.dart';
 import 'package:movie_app/data/models/movie.dart';
 import 'package:movie_app/presentation/home/components/build_now_movies.dart';
+import 'package:movie_app/shared/loading_widget.dart';
 
-import 'home_error.dart';
+import '../../../shared/shared_error.dart';
 
 
 class NowPlaying extends StatefulWidget {
@@ -16,7 +17,7 @@ class NowPlaying extends StatefulWidget {
   State<NowPlaying> createState() => _NowPlayingState();
 }
 
-class _NowPlayingState extends State<NowPlaying> {
+class _NowPlayingState extends State<NowPlaying>  {
 
   final selectedIndex = ValueNotifier<int>(0);
 
@@ -28,30 +29,28 @@ class _NowPlayingState extends State<NowPlaying> {
 
   @override
   Widget build(BuildContext context) {
+    final Orientation orientation=MediaQuery.of(context).orientation;
+    final Size  size=MediaQuery.of(context).size;
+
     return BlocBuilder<MovieBloc, MovieState>(
       builder: (BuildContext context, state) {
-        if(state is MovieError){
 
-          return HomeError(error: state.errorMessage,onPressed: (){
-            BlocProvider.of<MovieBloc>(context).add(MovieEventStarted());
-          },);
-
-        }else if(state is MovieLoaded){
+       if(state is MovieLoaded){
           Movie movie= state.movie;
           if(movie.results!.isEmpty){
             return const Center(child: Text("No Movies"),);
           }else{
             return SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height *0.25,
+              width: size.width,
+              height:orientation==Orientation.portrait? size.height *0.25 : size.height * 0.5,
               child: ValueListenableBuilder(
                 valueListenable: selectedIndex,
                 builder: (context,int value, child) =>
                  Swiper(
                   scrollDirection: Axis.horizontal,
                   indicatorLayout: PageIndicatorLayout.WARM,
-                  itemHeight: MediaQuery.of(context).size.width,
-                  itemWidth: MediaQuery.of(context).size.height *0.25,
+                  itemHeight: size.height,
+                  itemWidth: size.width *0.25,
                   onIndexChanged: (int newValue) {
                     selectedIndex.value=newValue;
                   },
@@ -75,8 +74,11 @@ class _NowPlayingState extends State<NowPlaying> {
               ),
             );
           }
-        }else {
-          return const Center(child: CircularProgressIndicator());
+        }
+       if(state is MovieError){
+         return SharedError(error: state.errorMessage);
+       } else {
+          return const LoadingWidget();
         }
       },
     );

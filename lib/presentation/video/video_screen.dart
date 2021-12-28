@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+
 class VideoScreen extends StatefulWidget {
-  final YoutubePlayerController controller;
-  const VideoScreen({Key? key,required this.controller}) : super(key: key);
+  final String videoUrl;
+  const VideoScreen({Key? key,required this.videoUrl}) : super(key: key);
 
   @override
   State<VideoScreen> createState() => _VideoScreenState();
@@ -10,16 +11,18 @@ class VideoScreen extends StatefulWidget {
 
 class _VideoScreenState extends State<VideoScreen> {
 
-  @override
-  void deactivate() {
-    // Pauses video while navigating to next page.
-    widget.controller.pause();
-    super.deactivate();
+ late final YoutubePlayerController controller;
+
+ @override
+  void initState() {
+   controller= YoutubePlayerController(initialVideoId: widget.videoUrl);
+    super.initState();
   }
+
 
   @override
   void dispose() {
-    widget.controller.dispose();
+    controller.close();
     super.dispose();
   }
 
@@ -27,12 +30,12 @@ class _VideoScreenState extends State<VideoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).backgroundColor,
       body: Stack(
         children: [
           Center(
-            child: YoutubePlayer(
-              controller: widget.controller,
+            child: YoutubePlayerIFrame(
+              controller: controller,
               aspectRatio: 10 / 8,
             ),
           ),
@@ -44,9 +47,10 @@ class _VideoScreenState extends State<VideoScreen> {
                 Navigator.pop(context);
               },
               child: const CircleAvatar(
-                backgroundColor: Colors.black,
                 radius: 15,
-                child: Icon(Icons.close,color: Colors.white,size: 20,),
+                child: Icon(
+                  Icons.close,
+                  size: 20,),
               ),
             ),
           ),

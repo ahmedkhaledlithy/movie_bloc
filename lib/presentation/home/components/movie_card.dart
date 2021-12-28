@@ -51,7 +51,7 @@ class MovieCard extends StatelessWidget {
               const Icon(Icons.star,color: kFillStarColor,),
               const SizedBox(width: kDefaultPadding / 2),
               Text(
-                "${movie.voteAverage}",
+                "${movie.voteAverage} / 10",
                 style: Theme.of(context).textTheme.bodyText2,
               )
             ],

@@ -25,7 +25,7 @@ class DetailsError extends DetailsState {
 }
 
 class DetailsLoaded extends DetailsState {
-  final MovieDetailsResponse movieDetails;
+  final MovieDetails movieDetails;
 
   const DetailsLoaded({required this.movieDetails});
 

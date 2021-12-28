@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-
 import 'package:movie_app/constants/constants_app.dart';
 import 'package:movie_app/data/models/movie_details.dart';
 import 'package:movie_app/presentation/details/components/cast_and_crew.dart';
 import 'package:movie_app/presentation/details/components/genres.dart';
 import 'package:movie_app/presentation/details/components/overview.dart';
+import 'package:movie_app/presentation/details/components/similar_movies.dart';
 import 'package:movie_app/presentation/details/components/title_duration_and_fav_btn.dart';
 import 'backdrop_rating.dart';
 
@@ -27,6 +27,7 @@ class Body extends StatelessWidget {
           const SizedBox(height: kDefaultPadding / 2),
           OverView(movie: details,),
           CastAndCrew(movieId: movieId,),
+          SimilarMovies(movieId: movieId,),
         ],
       ),
     );

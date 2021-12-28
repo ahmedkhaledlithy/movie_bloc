@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app/business_logic/castbloc/cast_bloc.dart';
 import 'package:movie_app/constants/constants_app.dart';
 import 'package:movie_app/data/models/cast.dart';
-import 'package:movie_app/presentation/details/components/cast_card.dart';
+import 'package:movie_app/shared/loading_widget.dart';
+import 'package:movie_app/shared/persons_cast.dart';
+import 'package:movie_app/shared/shared_error.dart';
 
 class CastAndCrew extends StatefulWidget {
   final int movieId;
@@ -36,7 +38,8 @@ class _CastAndCrewState extends State<CastAndCrew> {
           BlocBuilder<CastBloc,CastState>(
             builder: (BuildContext context, state) {
               if (state is CastError) {
-                return Center(child: Text(state.errorMessage),);
+                return SharedError(error: state.errorMessage);
+
               } else if (state is CastLoaded) {
                 return SizedBox(
                   height: 160,
@@ -45,13 +48,18 @@ class _CastAndCrewState extends State<CastAndCrew> {
                     itemCount: state.cast.cast!.length,
                     itemBuilder: (context, index) {
                       final Cast cast = state.cast.cast![index];
+                      return PersonsCast(
+                        margin:const EdgeInsets.only(right: kDefaultPadding),
+                        imageUrl: cast.profilePath,
+                        name: cast.originalName!,
+                        subTitle: cast.character!,
+                      );
 
-                      return CastCard(cast: cast);
                     },
                   ),
                 );
               } else {
-                return const Center(child: CircularProgressIndicator());
+                return const LoadingWidget();
               }
 
             },

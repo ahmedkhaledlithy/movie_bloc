@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_app/business_logic/themebloc/theme_cubit.dart';
 import 'package:movie_app/constants/constants_app.dart';
 import 'package:movie_app/data/models/movie_details.dart';
 
 class GenresWidget extends StatelessWidget {
   final MovieDetails movie;
-
   const GenresWidget({Key? key, required this.movie}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final bool theme=BlocProvider.of<ThemeCubit>(context).state;
+
     return Padding(
       padding: const EdgeInsets.all(kDefaultPadding / 2),
       child: Column(
@@ -36,13 +39,13 @@ class GenresWidget extends StatelessWidget {
                       vertical: kDefaultPadding / 5,
                     ),
                     decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black26),
+                        border: Border.all(color:theme? lightColor :Colors.black26),
                         borderRadius: const BorderRadius.all(Radius.circular(20)),
                        ),
                     child: Text(
                       movie.genres![index].name!,
                       style: TextStyle(
-                          color: kTextColor.withOpacity(0.8), fontSize: 16),
+                          color: theme? kSecondaryColor :kTextColor.withOpacity(0.8), fontSize: 16),
                     ),
                   );
                 }),

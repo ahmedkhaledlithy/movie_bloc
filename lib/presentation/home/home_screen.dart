@@ -10,19 +10,20 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return  OfflineBuilder(
       connectivityBuilder: (BuildContext context, ConnectivityResult connectivity, Widget child) {
         final bool connected = connectivity != ConnectivityResult.none;
         if(connected){
           return child;
         }else{
-          return const OfflineWidget();
+          return  const OfflineWidget();
         }
       },
-      child: const Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBarWidget(),
-        body: Body(),
+      child:  Scaffold(
+        backgroundColor: Theme.of(context).backgroundColor,
+        appBar: const AppBarWidget(),
+        body: const Body(),
       ),
     );
   }

@@ -4,7 +4,7 @@ import 'package:movie_app/constants/strings.dart';
 import 'package:movie_app/data/models/cast.dart';
 import 'package:movie_app/data/models/genre.dart';
 import 'package:movie_app/data/models/movie.dart';
-import 'package:movie_app/data/models/movie_details_response.dart';
+import 'package:movie_app/data/models/movie_details.dart';
 import 'package:movie_app/data/models/trending_persons.dart';
 import 'package:movie_app/data/models/video.dart';
 
@@ -70,7 +70,7 @@ class MoviesApiService{
       Response response = await dio.get(getPlayingUrl, queryParameters: params);
       return Movie.fromJson(response.data);
     } on DioError catch (error, stacktrace) {
-      debugPrint("Exception : $error  stackTrace: $stacktrace");
+      debugPrint("Exception : $error  stackTrace : $stacktrace");
       if(error.type == DioErrorType.connectTimeout){
         throw "Check Your Connection ";
       }
@@ -175,7 +175,7 @@ class MoviesApiService{
 
 
 
-  Future<MovieDetailsResponse> getMoviesDetails(int id) async {
+  Future<MovieDetails> getMoviesDetails(int id) async {
     var params = {
       "api_key": apikey,
       "language": "en-US",
@@ -184,7 +184,7 @@ class MoviesApiService{
     try {
 
       Response response = await dio.get(movieUrl + "/$id", queryParameters: params);
-        return MovieDetailsResponse.fromJson(response.data);
+        return MovieDetails.fromJson(response.data);
 
     } on DioError catch (error, stacktrace) {
       debugPrint("Exception : $error  stackTrace: $stacktrace");

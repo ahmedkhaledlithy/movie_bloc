@@ -21,7 +21,9 @@ class OverView extends StatelessWidget {
           Text(
             movie.overview!,
             style: const TextStyle(
-              color: Color(0xFF737599),
+              color: Colors.grey,
+              fontSize: 16
+
             ),
           ),
         ],

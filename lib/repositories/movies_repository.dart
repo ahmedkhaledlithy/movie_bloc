@@ -1,7 +1,7 @@
 import 'package:movie_app/data/models/cast.dart';
 import 'package:movie_app/data/models/genre.dart';
 import 'package:movie_app/data/models/movie.dart';
-import 'package:movie_app/data/models/movie_details_response.dart';
+import 'package:movie_app/data/models/movie_details.dart';
 import 'package:movie_app/data/models/trending_persons.dart';
 import 'package:movie_app/data/models/video.dart';
 import 'package:movie_app/data/services/movies_service_api.dart';
@@ -37,7 +37,7 @@ class MoviesRepositories{
   }
 
 
-  Future<MovieDetailsResponse> getMoviesDetails(int id) async {
+  Future<MovieDetails> getMoviesDetails(int id) async {
     return await moviesApiService.getMoviesDetails(id);
   }
 

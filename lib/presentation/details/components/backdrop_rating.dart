@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_app/business_logic/themebloc/theme_cubit.dart';
 import 'package:movie_app/constants/constants_app.dart';
 import 'package:movie_app/data/models/movie_details.dart';
+import 'package:movie_app/presentation/details/components/some_info.dart';
 
 class BackdropAndRating extends StatelessWidget {
   final MovieDetails movie;
@@ -8,14 +11,15 @@ class BackdropAndRating extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+   final Size size = MediaQuery.of(context).size;
+    final Orientation orientation=MediaQuery.of(context).orientation;
 
     return SizedBox(
-      height: size.height * 0.4,
+      height:orientation==Orientation.portrait? size.height * 0.4 : size.height * 0.7,
       child: Stack(
         children: [
           Container(
-            height: size.height * 0.35,
+            height:orientation==Orientation.portrait? size.height * 0.35 : size.height * 0.6,
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(50),),
               image: DecorationImage(
@@ -34,7 +38,7 @@ class BackdropAndRating extends StatelessWidget {
               width: size.width * 0.9,
               height: 100,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: BlocProvider.of<ThemeCubit>(context).state? Colors.black: lightColor,
                 borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(50),
                   topLeft: Radius.circular(50),
@@ -52,44 +56,24 @@ class BackdropAndRating extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children:  [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children:   [
-                        const Icon(Icons.money,color:  Color(0xFF51CF66),),
-                        const Text("Budget",style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),),
-                        const SizedBox(height: kDefaultPadding / 4),
-                        Text(movie.budget.toString(),style: const TextStyle(color: kTextLightColor),),
-                      ],
+
+                    SomeInfo(
+                      iconData: Icons.money,
+                      iconColor: const Color(0xFF51CF66),
+                      infoName: "Budget",
+                      subName: movie.budget.toString(),
                     ),
-
-
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children:   [
-                        const Icon(Icons.watch_later_outlined,color: kTextLightColor),
-                        const Text("Duration",style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),),
-                        const SizedBox(height: kDefaultPadding / 4),
-                        Text(movie.runtime!.toString() + " min",style: const TextStyle(color: kTextLightColor),),
-                      ],
+                    SomeInfo(
+                      iconData: Icons.watch_later_outlined,
+                      iconColor: kTextLightColor,
+                      infoName: "Duration",
+                      subName: "${movie.runtime} min",
                     ),
-
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children:  [
-                        const Icon(Icons.calendar_today,color: kTextLightColor),
-                        const Text(
-                          "Release Date",
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500),
-                        ),
-                        const SizedBox(height: kDefaultPadding / 4),
-                        Text(
-                          movie.releaseDate!,
-                          style: const TextStyle(color: kTextLightColor),
-                        )
-                      ],
+                    SomeInfo(
+                      iconData: Icons.calendar_today,
+                      iconColor: kTextLightColor,
+                      infoName: "Release Date",
+                      subName:  movie.releaseDate!,
                     ),
                   ],
                 ),

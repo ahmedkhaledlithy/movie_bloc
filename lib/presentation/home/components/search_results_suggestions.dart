@@ -4,6 +4,7 @@ import 'package:movie_app/business_logic/searchbloc/search_movies_bloc.dart';
 import 'package:movie_app/constants/constants_app.dart';
 import 'package:movie_app/constants/strings.dart';
 import 'package:movie_app/data/models/movie.dart';
+import 'package:movie_app/shared/loading_widget.dart';
 
 class SearchResultsWidget extends StatelessWidget {
 
@@ -52,9 +53,7 @@ class SearchResultsWidget extends StatelessWidget {
             child: Text(state.errorMessage),
           );
         } else {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const LoadingWidget();
         }
       },
     );

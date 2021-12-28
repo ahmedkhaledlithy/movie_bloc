@@ -9,7 +9,6 @@ import 'package:movie_app/presentation/details/details_screen.dart';
 import 'package:movie_app/presentation/home/home_screen.dart';
 import 'package:movie_app/presentation/video/video_screen.dart';
 import 'package:movie_app/repositories/movies_repository.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'business_logic/moviebloc/movie_bloc.dart';
 import 'data/services/movies_service_api.dart';
 
@@ -63,11 +62,7 @@ class AppRouting {
         final videoId = settings.arguments as String;
         return MaterialPageRoute(
           builder: (_) => VideoScreen(
-            controller: YoutubePlayerController(initialVideoId: videoId,flags: const YoutubePlayerFlags(
-              autoPlay: true,
-              loop: true,
-              enableCaption: true,
-            )),
+            videoUrl: videoId,
           ),
         );
     }

@@ -5,7 +5,8 @@ import 'package:movie_app/business_logic/movies_by_genre_id_bloc/movies_by_genre
 import 'package:movie_app/constants/constants_app.dart';
 import 'package:movie_app/data/models/genre.dart';
 import 'package:movie_app/presentation/home/components/genre_card.dart';
-import 'package:movie_app/presentation/home/components/home_error.dart';
+import 'package:movie_app/shared/loading_widget.dart';
+import 'package:movie_app/shared/shared_error.dart';
 
 class GenresList extends StatefulWidget {
   const GenresList({Key? key}) : super(key: key);
@@ -30,7 +31,6 @@ class _GenresListState extends State<GenresList> {
     return BlocBuilder<GenresBloc, GenresState>(
       builder: (context, state) {
         if(state is GenresLoaded){
-
             return Container(
               margin: const EdgeInsets.symmetric(vertical: kDefaultPadding),
               height: 36,
@@ -57,11 +57,10 @@ class _GenresListState extends State<GenresList> {
             );
 
         }else if(state is GenresError){
-         return HomeError(error: state.error,onPressed: (){
-           BlocProvider.of<GenresBloc>(context).add(GenresEventStarted());
-         },);
+         return SharedError(error: state.error);
         }else{
-          return const Center(child: CircularProgressIndicator(),);
+          return const LoadingWidget();
+
         }
       },
     );

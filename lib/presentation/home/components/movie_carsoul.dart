@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_app/business_logic/movies_by_genre_id_bloc/movies_by_genre_bloc.dart';
 import 'package:movie_app/constants/constants_app.dart';
-import 'home_error.dart';
+import 'package:movie_app/shared/loading_widget.dart';
+import '../../../shared/shared_error.dart';
 import 'movie_card.dart';
 
 class MovieCarousel extends StatefulWidget {
@@ -38,14 +39,15 @@ class _MovieCarouselState extends State<MovieCarousel> {
   @override
   Widget build(BuildContext context) {
 
-    final orientation=MediaQuery.of(context).orientation;
+   final Orientation orientation=MediaQuery.of(context).orientation;
+
     return BlocBuilder<MoviesByGenreBloc, MoviesByGenreState>(
       builder: (context, state) {
        if(state is MoviesByGenreLoaded){
          return Padding(
            padding: const EdgeInsets.symmetric(vertical: kDefaultPadding),
            child: AspectRatio(
-             aspectRatio:orientation==Orientation.portrait? 0.8 : 1.5,
+             aspectRatio:orientation==Orientation.portrait? 0.8 : 1.6,
              child: ValueListenableBuilder(
                valueListenable: initialPage,
                builder: (BuildContext context,int value, Widget? child) => PageView.builder(
@@ -78,12 +80,11 @@ class _MovieCarouselState extends State<MovieCarousel> {
          );
        }else if(state is MoviesByGenreError){
 
-         return HomeError(error: state.errorMessage,onPressed: (){
-           BlocProvider.of<MoviesByGenreBloc>(context).add(const MoviesByGenreEventStarted(genreId: 28));
-         },);
+         return SharedError(error: state.errorMessage);
 
        }else{
-         return const Center(child: CircularProgressIndicator(),);
+         return const LoadingWidget();
+
        }
       },
     );
